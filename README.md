@@ -3,9 +3,9 @@
 The purpose of this project is to provide a front-end user/server GUI for the Peergos Project.
 
 Target platforms are:
-    -- desktop
-    -- html5
-    -- android
+    - desktop
+    - html5
+    - android
     
 ##Libgdx
 
