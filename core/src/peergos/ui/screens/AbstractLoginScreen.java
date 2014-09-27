@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by chris on 9/27/14.
- */
+
 public abstract class AbstractLoginScreen extends BaseScreen {
 
     public AbstractLoginScreen(final Start app) {
@@ -39,13 +37,13 @@ public abstract class AbstractLoginScreen extends BaseScreen {
                 String passwd = passwordField.getText();
 
                 if (isEmpty(user)) {
-                    Dialog dialog = dialogBuilder("Please enter a username");
+                    Dialog dialog = app.dialogBuilder("Please enter a username");
                     dialog.show(app.stage);
                     loginButton.setChecked(false);
                     return;
                 }
                 else if (isEmpty(passwd)) {
-                    dialogBuilder("Please enter a password").show(app.stage);
+                    app.dialogBuilder("Please enter a password").show(app.stage);
                     loginButton.setChecked(false);
                     return;
                 }
@@ -58,7 +56,7 @@ public abstract class AbstractLoginScreen extends BaseScreen {
                     coreNodeUrl = new URL(coreNodeAddress);
                 } catch (MalformedURLException me) {
                     me.printStackTrace();
-                    dialogBuilder("Invalid coreNode URL: " + coreNodeAddress).show(app.stage);
+                    app.dialogBuilder("Invalid coreNode URL: " + coreNodeAddress).show(app.stage);
                     loginButton.setChecked(false);
                     return;
                 }
@@ -68,7 +66,7 @@ public abstract class AbstractLoginScreen extends BaseScreen {
                     dhtUrl = new URL(dhtAddress);
                 } catch (MalformedURLException me) {
                     me.printStackTrace();
-                    dialogBuilder("Invalid DHT URL: " + dhtAddress).show(app.stage);
+                    app.dialogBuilder("Invalid DHT URL: " + dhtAddress).show(app.stage);
                     loginButton.setChecked(false);
                     return;
                 }
@@ -78,8 +76,9 @@ public abstract class AbstractLoginScreen extends BaseScreen {
 //                    UserContext userContext = PeergosUtils.buildUserContext(user, passwd, coreNodeUrl, dhtSocketAddress);
                     UserContext userContext = buildUserContext(user, passwd, coreNodeUrl, dhtUrl);
                     loginButton.setChecked(false);
+                    //TODO go to main UI screen
                 } catch (IOException ioe) {
-                    dialogBuilder("Connection Error").show(app.stage);
+                    app.dialogBuilder("Connection Error").show(app.stage);
                     ioe.printStackTrace();
                 }
             }
@@ -92,11 +91,11 @@ public abstract class AbstractLoginScreen extends BaseScreen {
         mainTable.setBackground(app.skin.getDrawable("window1"));
         mainTable.setColor(app.skin.getColor("lt-blue"));
 
-        Label titleLabel = labelBuilder("Peergos");
-        Label usernameLabel = labelBuilder("Username: ");
-        Label passwordLabel = labelBuilder("Password: ");
-        Label coreNodeLabel = labelBuilder("coreNodeURL: ");
-        Label dhtLabel = labelBuilder("DHT URL: ");
+        Label titleLabel = app.labelBuilder("Peergos");
+        Label usernameLabel = app.labelBuilder("Username: ");
+        Label passwordLabel = app.labelBuilder("Password: ");
+        Label coreNodeLabel = app.labelBuilder("coreNodeURL: ");
+        Label dhtLabel = app.labelBuilder("DHT URL: ");
 
         mainTable.add(titleLabel);
         mainTable.row();

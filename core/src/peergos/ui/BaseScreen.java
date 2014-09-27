@@ -54,42 +54,9 @@ public abstract class BaseScreen extends Group {
     public float defaultPad(){return defaultPad;}
 
     public void hide() {
-    }	
+    }
 
 	protected BaseScreen getFirstScreen() {
         return new LoginScreen(app);
 	}
-
-    protected Label labelBuilder(String text)
-    {
-        return labelBuilder(text, Color.WHITE);
-    }
-    protected Label labelBuilder(String text, Color color) {
-        Label label = new Label(text, app.skin);
-        label.setAlignment(Align.center, Align.center);
-        label.setColor(color);
-        return label;
-    }
-
-    protected Dialog dialogBuilder(String text) {
-        return dialogBuilder(text, "OK");
-    }
-
-    protected Dialog dialogBuilder(String text, String buttonText) {
-
-        Label dialogLabel = labelBuilder(text);
-        dialogLabel.setWrap(true);
-
-        Dialog dialog = new Dialog("", app.skin);
-
-        dialog.padTop(10).padBottom(10);
-        dialog.getContentTable().add(dialogLabel).width((int) (app.w * 0.8)).row();
-        dialog.getButtonTable().padTop(50);
-        dialog.button(buttonText);
-
-        dialog.invalidateHierarchy();
-        dialog.invalidate();
-        dialog.layout();
-        return dialog;
-    }
 }

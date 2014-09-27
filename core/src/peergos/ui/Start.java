@@ -12,17 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import peergos.ui.screens.LoginScreen;
 import peergos.ui.utils.Styles;
 
-/**
- * an ApplicationListener that is similar to gdx.Game but has screen transitions and built-in boilerplate code for a few
- * things that I use in pretty much every libgdx app
- *
- * @author trey miller
- */
+
 public class Start implements ApplicationListener {
     public Stage stage;
     public TextureAtlas atlas;
@@ -154,4 +152,39 @@ public class Start implements ApplicationListener {
     }
 
     private static final Color clearColor = new Color(Color.BLACK);
+
+
+
+    public Label labelBuilder(String text)
+    {
+        return labelBuilder(text, Color.WHITE);
+    }
+    public Label labelBuilder(String text, Color color) {
+        Label label = new Label(text, skin);
+        label.setAlignment(Align.center, Align.center);
+        label.setColor(color);
+        return label;
+    }
+
+    public Dialog dialogBuilder(String text) {
+        return dialogBuilder(text, "OK");
+    }
+
+    public Dialog dialogBuilder(String text, String buttonText) {
+
+        Label dialogLabel = labelBuilder(text);
+        dialogLabel.setWrap(true);
+
+        Dialog dialog = new Dialog("", skin);
+
+        dialog.padTop(10).padBottom(10);
+        dialog.getContentTable().add(dialogLabel).width((int) (w * 0.8)).row();
+        dialog.getButtonTable().padTop(50);
+        dialog.button(buttonText);
+
+        dialog.invalidateHierarchy();
+        dialog.invalidate();
+        dialog.layout();
+        return dialog;
+    }
 }
