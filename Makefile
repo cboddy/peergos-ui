@@ -1,3 +1,6 @@
+.PHONY: compile
+compile:
+	./gradlew core:compileJava
 
 .PHONY: run_desktop
 run_desktop: 
