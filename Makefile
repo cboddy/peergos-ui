@@ -21,7 +21,7 @@ deploy_desktop:
 #This is so resource intensive my machine grinds
 #to a halt unless reduce the scheduling priorities.
 deploy_html5: 
-	nice -n 19 ./gradlew android:dist 
+	nice -n 19 ./gradlew html:dist 
 
 .PHONY: deploy_android
 deploy_android:
