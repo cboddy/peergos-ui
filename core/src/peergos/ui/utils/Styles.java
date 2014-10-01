@@ -51,4 +51,24 @@ public class Styles {
         skin.add("default", windowStyle);
 
 	}
+
+
+    public String sizeString(long length) {
+        return Double.toString((double) length / 1e6) + " MB";
+    }
+
+    public enum Size {
+        MB(1e6f, "MB"), KB(1e6f, "KB");
+        final float normalization;
+        final String units;
+        Size(float normalization, String units)
+        {
+            this.normalization = normalization;
+            this.units = units;
+        }
+
+        public String format(long length) {
+            return Float.toString((float) length / normalization) + " " + units +"s";
+        }
+    }
 }

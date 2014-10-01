@@ -13,9 +13,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
 
-/**
- * Created by chris on 9/27/14.
- */
+
 public class LoginScreen extends AbstractLoginScreen {
 
     public LoginScreen(final Start app) {
@@ -31,5 +29,4 @@ public class LoginScreen extends AbstractLoginScreen {
         return new UserContext(username, user, dht, coreNode);
 
     }
-
 }
