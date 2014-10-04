@@ -171,8 +171,4 @@ public class BrowserScreen extends BaseScreen {
             //TODO: add some sort of dialog error message
         }
     }
-
-
-
-
 }
