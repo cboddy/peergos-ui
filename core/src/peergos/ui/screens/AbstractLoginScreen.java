@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import peergos.crypto.User;
 import peergos.ui.BaseScreen;
 import peergos.ui.Start;
 import peergos.user.UserContext;
@@ -74,7 +75,13 @@ public abstract class AbstractLoginScreen extends BaseScreen {
 
                 try {
 //                    UserContext userContext = PeergosUtils.buildUserContext(user, passwd, coreNodeUrl, dhtSocketAddress);
-                    UserContext userContext = buildUserContext(user, passwd, coreNodeUrl, dhtUrl);
+                    UserContext userContextA = buildUserContext(user, passwd, coreNodeUrl, dhtUrl);
+                    UserContext userContextB = buildUserContext(user+"_1", passwd, coreNodeUrl, dhtUrl);
+
+
+
+                    BrowserScreen browser = new BrowserScreen(app, userContextA);
+                    app.switchScreens(browser);
                     loginButton.setChecked(false);
                     //TODO go to main UI screen
                 } catch (IOException ioe) {
@@ -123,5 +130,4 @@ public abstract class AbstractLoginScreen extends BaseScreen {
     private static boolean isEmpty(String s) {return s.equals("");}
 
     public abstract UserContext buildUserContext(String user, String password, URL coreNodeUrl, URL dhtUrl) throws IOException;
-
 }

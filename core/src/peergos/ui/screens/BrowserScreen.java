@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import peergos.crypto.User;
 import peergos.ui.BaseScreen;
 import peergos.ui.Start;
 import peergos.ui.utils.Styles;
@@ -77,13 +78,16 @@ public class BrowserScreen extends BaseScreen {
         @Override public FileView[] call() throws IOException {
             List<FileView> views = new ArrayList<FileView>();
 
-            if (parent == null)
-                for (Map.Entry<String, FileWrapper> entry: userContext.getRootFiles().entrySet())
-                {
+            if (parent == null) {
+                if (userContext.getRootFiles().isEmpty())
+                    System.out.println("No root files for user ");
+                for (Map.Entry<String, FileWrapper> entry : userContext.getRootFiles().entrySet()) {
+                    System.out.println("HERE !!!!");
                     String sharer = entry.getKey();
                     FileWrapper wrapper = entry.getValue();
                     views.add(new FileView(wrapper, parent, sharer));
                 }
+            }
             else
                 for (FileWrapper wrapper: parent.fileWrapper.getChildren())
                     views.add(new FileView(wrapper, parent));
@@ -158,7 +162,7 @@ public class BrowserScreen extends BaseScreen {
         FileView[] children = null;
 
         //TODO: add  some sort of dialog spinner thing here
-        while (! future.isDone())
+        while (!future.isDone())
             try {
                 children = future.get();
             } catch (Throwable t) {
@@ -171,8 +175,4 @@ public class BrowserScreen extends BaseScreen {
             //TODO: add some sort of dialog error message
         }
     }
-
-
-
-
 }

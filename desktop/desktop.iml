@@ -6,6 +6,11 @@
         <option name="GRADLE_PROJECT_PATH" value=":desktop" />
       </configuration>
     </facet>
+    <facet type="java-gradle" name="Java-Gradle">
+      <configuration>
+        <option name="BUILD_FOLDER_PATH" />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/classes/main" />
@@ -21,7 +26,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="library" exported="" name="gdx-backend-lwjgl-1.3.1" level="project" />
     <orderEntry type="library" exported="" name="gdx-platform-1.3.1-natives-desktop" level="project" />
     <orderEntry type="library" exported="" name="gdx-1.3.1" level="project" />
@@ -37,6 +41,7 @@
     <orderEntry type="library" exported="" name="lwjgl_util-2.9.1" level="project" />
     <orderEntry type="library" exported="" name="jlayer-1.0.1-gdx" level="project" />
     <orderEntry type="library" exported="" name="jorbis-0.0.17" level="project" />
+    <orderEntry type="module" module-name="core" exported="" />
   </component>
 </module>
 

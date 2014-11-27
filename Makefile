@@ -4,7 +4,7 @@ compile:
 
 .PHONY: run_desktop
 run_desktop: 
-	./gradlew desktop:run
+	./gradlew  desktop:run 
 
 .PHONY: run_html5
 run_html5:
