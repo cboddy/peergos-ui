@@ -3,12 +3,11 @@ package peergos.ui.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import peergos.crypto.User;
 import peergos.ui.BaseScreen;
 import peergos.ui.Start;
-import peergos.ui.utils.Log;
-
 import peergos.user.UserContext;
 
 import java.io.IOException;
@@ -74,19 +73,21 @@ public abstract class AbstractLoginScreen extends BaseScreen {
                 }
 
 
-                UserContext userContext = null; 
                 try {
-                    userContext = buildUserContext(user, passwd, coreNodeUrl, dhtUrl);
+//                    UserContext userContext = PeergosUtils.buildUserContext(user, passwd, coreNodeUrl, dhtSocketAddress);
+                    UserContext userContextA = buildUserContext(user, passwd, coreNodeUrl, dhtUrl);
+                    UserContext userContextB = buildUserContext(user+"_1", passwd, coreNodeUrl, dhtUrl);
+
+
+
+                    BrowserScreen browser = new BrowserScreen(app, userContextA);
+                    app.switchScreens(browser);
                     loginButton.setChecked(false);
+                    //TODO go to main UI screen
                 } catch (IOException ioe) {
                     app.dialogBuilder("Connection Error").show(app.stage);
                     ioe.printStackTrace();
-                    return;
                 }
-                Log.log("Starting browser with user "+ user +", core-node "+ coreNodeUrl +", dht "+ dhtUrl);
-                //TODO go to main UI screen
-                app.switchScreens(new BrowserScreen(app, userContext));
-
             }
 
 
@@ -129,5 +130,4 @@ public abstract class AbstractLoginScreen extends BaseScreen {
     private static boolean isEmpty(String s) {return s.equals("");}
 
     public abstract UserContext buildUserContext(String user, String password, URL coreNodeUrl, URL dhtUrl) throws IOException;
-
 }
