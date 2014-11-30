@@ -68,7 +68,8 @@ public class Styles {
         }
 
         public String format(long length) {
-            return Float.toString((float) length / normalization) + " " + units +"s";
+            float f =  length / normalization;
+            return String.format("%.2f", f) + units;
         }
     }
 }

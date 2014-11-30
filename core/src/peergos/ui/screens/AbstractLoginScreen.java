@@ -74,9 +74,8 @@ public abstract class AbstractLoginScreen extends BaseScreen {
 
 
                 try {
-//                    UserContext userContext = PeergosUtils.buildUserContext(user, passwd, coreNodeUrl, dhtSocketAddress);
                     UserContext userContextA = buildUserContext(user, passwd, coreNodeUrl, dhtUrl);
-                    UserContext userContextB = buildUserContext(user+"_1", passwd, coreNodeUrl, dhtUrl);
+
 
 
 

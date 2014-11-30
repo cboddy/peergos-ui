@@ -70,24 +70,24 @@ public class LoginScreen extends AbstractLoginScreen {
 
         User sharer = new User(root.priv, root.pub);
 
-//        int frags = 120;
-//        for (int i = 0; i < frags; i++) {
-//            byte[] frag = ArrayOps.random(32);
-//            byte[] message = ArrayOps.concat(sharer.getPublicKey(), frag);
-//            byte[] signature = sharer.hashAndSignMessage(message);
-//            if (! coreNode.registerFragmentStorage(receiverName,
-//                    new InetSocketAddress("localhost", 666),
-//                    receiverName,
-//                    sharer.getPublicKey(),
-//                    frag,
-//                    signature)) {
-//                System.out.println("Failed to register fragment storage!");
-//            }
-//        }
-//        long quota = coreNode.getQuota(receiverName);
-//        System.out.println("Generated quota: " + quota/1024 + " KiB");
+        int frags = 120;
+        for (int i = 0; i < frags; i++) {
+            byte[] frag = ArrayOps.random(32);
+            byte[] message = ArrayOps.concat(sharer.getPublicKey(), frag);
+            byte[] signature = sharer.hashAndSignMessage(message);
+            if (! coreNode.registerFragmentStorage(receiverName,
+                    new InetSocketAddress("localhost", 666),
+                    receiverName,
+                    sharer.getPublicKey(),
+                    frag,
+                    signature)) {
+                System.out.println("Failed to register fragment storage!");
+            }
+        }
+        long quota = coreNode.getQuota(receiverName);
+        System.out.println("Generated quota: " + quota/1024 + " KiB");
         UserContext.Test test = new UserContext.Test();
         test.mediumFileTest(receiverName, sharer, root.priv, receiverContext, context);
-        return context;
+        return receiverContext;
     }
 }

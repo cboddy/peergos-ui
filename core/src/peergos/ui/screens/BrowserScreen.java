@@ -6,12 +6,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import peergos.crypto.SymmetricKey;
+import peergos.crypto.SymmetricLocationLink;
 import peergos.crypto.User;
 import peergos.ui.BaseScreen;
 import peergos.ui.Start;
 import peergos.ui.utils.Styles;
 import peergos.user.UserContext;
-import peergos.user.fs.FileWrapper;
+import peergos.user.fs.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -20,19 +22,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static org.junit.Assert.assertTrue;
+
 public class BrowserScreen extends BaseScreen {
 
     class FileView {
-        final FileWrapper fileWrapper;
-        final String sharer;
+        final String name;
+        final long size;
         final FileView parent;
-        FileView(FileWrapper wrapper, FileView parent) {
-            this(wrapper, parent, parent.sharer);
-        }
-        FileView(FileWrapper wrapper, FileView parent, String sharer)
-        {
-            this.fileWrapper = wrapper;
-            this.sharer = sharer;
+        FileView(String name, long size, FileView parent) {
+            this.name = name;
+            this.size = size;
             this.parent = parent;
         }
 
@@ -47,8 +47,8 @@ public class BrowserScreen extends BaseScreen {
                 }
             });
 
-            Label nameLabel = app.labelBuilder(fileWrapper.props().name);
-            String sizeText = Styles.Size.MB.format(fileWrapper.props().getSize());
+            Label nameLabel = app.labelBuilder(name);
+            String sizeText = Styles.Size.MB.format(size);
             Label sizeLabel = app.labelBuilder(sizeText);
             TextButton downloadButton = new TextButton("download", app.skin);
 
@@ -62,11 +62,11 @@ public class BrowserScreen extends BaseScreen {
         @Override public boolean equals(Object o) {
             if (! (o instanceof  FileView))
                 return false;
-            FileView v = (FileView) o;
-            return v.sharer.equals(sharer) && fileWrapper.equals(v.fileWrapper) && parent.equals(v.parent);
+            FileView that = (FileView) o;
+            return this.name.equals(that.name) && this.size == that.size;
         }
         @Override public int hashCode() {
-            return sharer.hashCode() + fileWrapper.hashCode() * 31 + parent.hashCode() * 31 * 31;
+            return (int) size + name.hashCode();
         }
     }
 
@@ -79,18 +79,33 @@ public class BrowserScreen extends BaseScreen {
             List<FileView> views = new ArrayList<FileView>();
 
             if (parent == null) {
-                if (userContext.getRootFiles().isEmpty())
-                    System.out.println("No root files for user ");
-                for (Map.Entry<String, FileWrapper> entry : userContext.getRootFiles().entrySet()) {
-                    System.out.println("HERE !!!!");
-                    String sharer = entry.getKey();
-                    FileWrapper wrapper = entry.getValue();
-                    views.add(new FileView(wrapper, parent, sharer));
+//                if (userContext.getRootFiles().isEmpty())
+//                    System.out.println("No root files for user ");
+//                for (Map.Entry<String, FileWrapper> entry : userContext.getRootFiles().entrySet()) {
+//                    System.out.println("HERE !!!!");
+//                    String sharer = entry.getKey();
+//                    FileWrapper wrapper = entry.getValue();
+//                    views.add(new FileView(wrapper, parent, sharer));
+//                }
+                Map<UserContext.StaticDataElement, DirAccess> roots = userContext.getRoots();
+                for (UserContext.StaticDataElement dirPointer : roots.keySet()) {
+                    SymmetricKey rootDirKey = ((UserContext.SharedRootDir) dirPointer).rootDirKey;
+                    DirAccess dir = roots.get(dirPointer);
+                    try {
+                        Map<SymmetricLocationLink, Metadata> files = userContext.retrieveMetadata(dir.getFiles(), rootDirKey);
+                        for (SymmetricLocationLink fileLoc : files.keySet()) {
+                            FileAccess fileBlob = (FileAccess) files.get(fileLoc);
+                            FileProperties fileProps = fileBlob.getProps(fileLoc.target(rootDirKey));
+                            System.out.println("Adding file "+ fileProps.name +" to view.");
+                            views.add(new FileView(fileProps.name, fileProps.getSize(), parent));
+
+                        }
+                    } catch (IOException e) {
+                        System.err.println("Couldn't get File metadata!");
+                        throw new IllegalStateException(e);
+                    }
                 }
             }
-            else
-                for (FileWrapper wrapper: parent.fileWrapper.getChildren())
-                    views.add(new FileView(wrapper, parent));
 
             return views.toArray(new FileView[0]);
         }
